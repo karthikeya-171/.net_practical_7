@@ -1,0 +1,96 @@
+
+@model FeedbackManagement.Models.Feedback
+
+@{
+    ViewBag.Title = "Submit Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Feedback Form</h2>
+<p>Share your experience and help us improve.</p>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@using (Html.BeginForm("Index", "Feedback",
+                       FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name,
+            new { @class = "form-control",
+                  placeholder = "Enter your full name" })
+        @Html.ValidationMessageFor(m => m.Name, "",
+            new { @class = "field-error" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email)
+        @Html.TextBoxFor(m => m.Email,
+            new { @class = "form-control",
+                  placeholder = "Enter your email",
+                  type = "email" })
+        @Html.ValidationMessageFor(m => m.Email, "",
+            new { @class = "field-error" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Category)
+        @Html.DropDownListFor(m => m.Category,
+            new SelectList(new[] {
+                "Suggestion", "Complaint",
+                "Compliment", "General"
+            }),
+            "-- Select Category --",
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Category, "",
+            new { @class = "field-error" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Rating)
+        @Html.DropDownListFor(m => m.Rating,
+            new SelectList(new[] {
+                new SelectListItem { Text = "1 - Poor", Value = "1" },
+                new SelectListItem { Text = "2 - Fair", Value = "2" },
+                new SelectListItem { Text = "3 - Good", Value = "3" },
+                new SelectListItem { Text = "4 - Very Good", Value = "4" },
+                new SelectListItem { Text = "5 - Excellent", Value = "5" }
+            }, "Value", "Text"),
+            "-- Select Rating --",
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Rating, "",
+            new { @class = "field-error" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Comments)
+        @Html.TextAreaFor(m => m.Comments,
+            new { @class = "form-control",
+                  rows = "4",
+                  placeholder = "Write your feedback here" })
+        @Html.ValidationMessageFor(m => m.Comments, "",
+            new { @class = "field-error" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Submit Feedback
+    </button>
+}
+
+<hr />
+
+@Html.Partial("_FeedbackList",
+    (IEnumerable<FeedbackManagement.Models.Feedback>)
+        ViewBag.FeedbackList)
+
+@section scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+}
