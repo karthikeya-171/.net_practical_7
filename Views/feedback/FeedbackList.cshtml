@@ -1,0 +1,29 @@
+
+@model IEnumerable<FeedbackManagement.Models.Feedback>
+
+<h3>Submitted Feedback</h3>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>@item.Name</strong>
+                <span class="pull-right">
+                    Rating: @item.Rating / 5
+                </span>
+            </div>
+
+            <div class="panel-body">
+                <p><strong>Email:</strong> @item.Email</p>
+                <p><strong>Category:</strong> @item.Category</p>
+                <p><strong>Comments:</strong> @item.Comments</p>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>No feedback has been submitted yet.</p>
+}
